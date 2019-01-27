@@ -49,7 +49,14 @@ public class Chessboard {
     }
 
     public void render() {
+        System.out.print("    ");
+        for (char column = 'A'; column <= 'H'; column++) {
+            System.out.print(column + "    ");
+        }
+        System.out.println();
+
         for (int row = 8; row >= 1; row--) {
+            System.out.print(row + " ");
             for (char column = 'A'; column <= 'H'; column++) {
                 Square square = squares.get("" + column + row);
                 if (square.getPawn() == null) {
