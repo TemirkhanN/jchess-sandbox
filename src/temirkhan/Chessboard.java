@@ -73,6 +73,15 @@ public class Chessboard {
         }
     }
 
+    public void placePawn(Pawn.PawnType pawnName, String position) {
+        try {
+            Square pawnSquare = this.squares.get(position);
+            pawnSquare.placePawn(new Pawn(pawnName));
+        } catch (Exception e) {
+            System.out.println("Well, something went wrong and such pawn doesn't exist");
+        }
+    }
+
     private void createSquares() {
         this.squares = new HashMap<>(64);
         for (int row = 1; row <= 8; row++) {
@@ -80,15 +89,6 @@ public class Chessboard {
                 Square square = new Square(column, row);
                 this.squares.put(square.getPosition(), square);
             }
-        }
-    }
-
-    private void placePawn(Pawn.PawnType pawnName, String position) {
-        try {
-            Square pawnSquare = this.squares.get(position);
-            pawnSquare.placePawn(new Pawn(pawnName));
-        } catch (Exception e) {
-            System.out.println("Well, something went wrong and such pawn doesn't exist");
         }
     }
 }
