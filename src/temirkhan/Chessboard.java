@@ -6,53 +6,45 @@ import java.util.Map;
 
 public class Chessboard {
     private HashMap<String, Square> squares;
-    private static Map<String, String> initialArrangement;
+    private static Map<String, Pawn.PawnType> initialArrangement;
 
     static {
-        Map<String, String> initialChessArrangement = new HashMap<>(32);
+        Map<String, Pawn.PawnType> initialChessArrangement = new HashMap<>(32);
         for (char column = 'A'; column <= 'H'; column++) {
-            initialChessArrangement.put(column + "2", "whitePawn");
-            initialChessArrangement.put(column + "7", "blackPawn");
+            initialChessArrangement.put(column + "2", Pawn.PawnType.WHITE_PAWN);
+            initialChessArrangement.put(column + "7", Pawn.PawnType.BLACK_PAWN);
         }
 
-        initialChessArrangement.put("A1", "whiteRook");
-        initialChessArrangement.put("B1", "whiteKnight");
-        initialChessArrangement.put("C1", "whiteBishop");
-        initialChessArrangement.put("D1", "whiteQueen");
-        initialChessArrangement.put("E1", "whiteKing");
-        initialChessArrangement.put("F1", "whiteBishop");
-        initialChessArrangement.put("G1", "whiteKnight");
-        initialChessArrangement.put("H1", "whiteRook");
+        initialChessArrangement.put("A1", Pawn.PawnType.WHITE_ROOK);
+        initialChessArrangement.put("B1", Pawn.PawnType.WHITE_KNIGHT);
+        initialChessArrangement.put("C1", Pawn.PawnType.WHITE_BISHOP);
+        initialChessArrangement.put("D1", Pawn.PawnType.WHITE_QUEEN);
+        initialChessArrangement.put("E1", Pawn.PawnType.WHITE_KING);
+        initialChessArrangement.put("F1", Pawn.PawnType.WHITE_BISHOP);
+        initialChessArrangement.put("G1", Pawn.PawnType.WHITE_KNIGHT);
+        initialChessArrangement.put("H1", Pawn.PawnType.WHITE_ROOK);
 
-        initialChessArrangement.put("A8", "blackRook");
-        initialChessArrangement.put("B8", "blackKnight");
-        initialChessArrangement.put("C8", "blackBishop");
-        initialChessArrangement.put("D8", "blackQueen");
-        initialChessArrangement.put("E8", "blackKing");
-        initialChessArrangement.put("F8", "blackBishop");
-        initialChessArrangement.put("G8", "blackKnight");
-        initialChessArrangement.put("H8", "blackRook");
+        initialChessArrangement.put("A8", Pawn.PawnType.BLACK_ROOK);
+        initialChessArrangement.put("B8", Pawn.PawnType.BLACK_KNIGHT);
+        initialChessArrangement.put("C8", Pawn.PawnType.BLACK_BISHOP);
+        initialChessArrangement.put("D8", Pawn.PawnType.BLACK_QUEEN);
+        initialChessArrangement.put("E8", Pawn.PawnType.BLACK_KING);
+        initialChessArrangement.put("F8", Pawn.PawnType.BLACK_BISHOP);
+        initialChessArrangement.put("G8", Pawn.PawnType.BLACK_KNIGHT);
+        initialChessArrangement.put("H8", Pawn.PawnType.BLACK_ROOK);
 
         initialArrangement = Collections.unmodifiableMap(initialChessArrangement);
     }
 
     public Chessboard() {
-        this.squares = new HashMap<>(64);
-        for (int row = 1; row <= 8; row++) {
-            for (char column = 'A'; column <= 'H'; column++) {
-                Square square = new Square(column, row);
-                this.squares.put(square.getPosition(), square);
-            }
-        }
-        try {
-            for (Map.Entry<String, String> pawn: initialArrangement.entrySet()) {
-                String pawnPosition = pawn.getKey();
-                String pawnName     = pawn.getValue();
-                Square pawnSquare   = this.squares.get(pawnPosition);
-                pawnSquare.placePawn(new Pawn(pawnName));
-            }
-        } catch (Exception e) {
-            System.out.println("Well, something went wrong and such pawn doesn't exist");
+        this(initialArrangement);
+    }
+
+    public Chessboard(Map<String, Pawn.PawnType> arrangement) {
+        this.createSquares();
+
+        for (Map.Entry<String, Pawn.PawnType> pawnInfo : arrangement.entrySet()) {
+            this.placePawn(pawnInfo.getValue(), pawnInfo.getKey());
         }
     }
 
@@ -71,6 +63,25 @@ public class Chessboard {
                 }
             }
             System.out.println();
+        }
+    }
+
+    private void createSquares() {
+        this.squares = new HashMap<>(64);
+        for (int row = 1; row <= 8; row++) {
+            for (char column = 'A'; column <= 'H'; column++) {
+                Square square = new Square(column, row);
+                this.squares.put(square.getPosition(), square);
+            }
+        }
+    }
+
+    private void placePawn(Pawn.PawnType pawnName, String position) {
+        try {
+            Square pawnSquare = this.squares.get(position);
+            pawnSquare.placePawn(new Pawn(pawnName));
+        } catch (Exception e) {
+            System.out.println("Well, something went wrong and such pawn doesn't exist");
         }
     }
 }
