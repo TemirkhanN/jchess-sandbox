@@ -2,6 +2,7 @@ package temirkhan;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 public class RookProblem {
     private ArrayList<Character> lockedColumns;
@@ -40,13 +41,18 @@ public class RookProblem {
     }
 
     private char getFreeColumn() throws Exception {
+        ArrayList<Character> availableColumns = new ArrayList<>(8);
         for (char column = 'A'; column <= 'H'; column++) {
             if (!lockedColumns.contains(column)) {
-                return column;
+                availableColumns.add(column);
             }
         }
 
-        throw new Exception("No more columns left");
+        if (availableColumns.isEmpty()) {
+            throw new Exception("No more columns left");
+        }
+
+        return availableColumns.get(new Random().nextInt(availableColumns.size()));
     }
 
     private int getFreeRow() throws Exception {
